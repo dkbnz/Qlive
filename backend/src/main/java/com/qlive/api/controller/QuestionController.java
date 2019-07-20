@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Set;
 
 @RestController
-@RequestMapping(path = "/question")
+@RequestMapping(path = "/api/question")
 public class QuestionController {
 
     @Autowired
     private QuestionRepository questionRepository;
 
-    @GetMapping(path="/", produces = "application/json")
+    @GetMapping(path="", produces = "application/json")
     Iterable<Question> fetchAll()
     {
         return questionRepository.findAll();
@@ -26,7 +26,7 @@ public class QuestionController {
         return questionRepository.findById(id).get();
     }
 
-    @PostMapping(value = "/", produces = "application/json", consumes = "application/json")
+    @PostMapping(value = "", produces = "application/json", consumes = "application/json")
     Question newQuestion(@RequestBody Question newQuestion) {
         return questionRepository.save(newQuestion);
     }
