@@ -5,6 +5,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class Question {
@@ -14,23 +15,24 @@ public class Question {
     @GeneratedValue(generator="accessKey")
     private String id;
 
-    private String questionText;
-
     @CreationTimestamp
     private Date createdDate;
 
+    private String questionText;
+
+    private Boolean multiselect = false;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Option> questionOptions;
+
     protected Question() {}
 
-    public Question(String questionText) {
-        this.questionText = questionText;
+    public String getId() {
+        return id;
     }
 
-    public String getQuestionText() {
-        return questionText;
-    }
-
-    public void setQuestionText(String questionText) {
-        this.questionText = questionText;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public Date getCreatedDate() {
@@ -41,11 +43,27 @@ public class Question {
         this.createdDate = createdDate;
     }
 
-    public String getId() {
-        return id;
+    public String getQuestionText() {
+        return questionText;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setQuestionText(String questionText) {
+        this.questionText = questionText;
+    }
+
+    public Boolean getMultiselect() {
+        return multiselect;
+    }
+
+    public void setMultiselect(Boolean multiselect) {
+        this.multiselect = multiselect;
+    }
+
+    public List<Option> getQuestionOptions() {
+        return questionOptions;
+    }
+
+    public void setQuestionOptions(List<Option> questionOptions) {
+        this.questionOptions = questionOptions;
     }
 }
