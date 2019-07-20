@@ -69,9 +69,13 @@
         this.question.questionOptions.pop();
       },
       submit() {
-        this.question.questionOptions.push({
-          optionText: ""
-        })
+        this.axios.post('question', this.question)
+          .then(function (response) {
+            console.log(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
       }
     }
   }
