@@ -5,8 +5,6 @@ import com.qlive.api.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping(path = "/question")
 public class QuestionController {
@@ -15,9 +13,21 @@ public class QuestionController {
     private QuestionRepository questionRepository;
 
     @GetMapping(path="/", produces = "application/json")
-    public Iterable<Question> fetchQuestions()
+    Iterable<Question> fetchAll()
     {
-        questionRepository.save(new Question("What is the time?"));
+        Question question = new Question("What is the time?");
+        questionRepository.save(question);
         return questionRepository.findAll();
+    }
+
+    @GetMapping(path="/{id}", produces = "application/json")
+    Question fetch(@PathVariable String id)
+    {
+        return questionRepository.findById(id).get();
+    }
+
+    @PostMapping(value = "/", produces = "application/json", consumes = "application/json")
+    Question newQuestion(@RequestBody Question newQuestion) {
+        return questionRepository.save(newQuestion);
     }
 }
