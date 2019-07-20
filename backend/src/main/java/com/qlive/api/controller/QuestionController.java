@@ -1,9 +1,11 @@
 package com.qlive.api.controller;
 
+import com.qlive.api.model.Option;
 import com.qlive.api.model.Question;
 import com.qlive.api.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import java.util.Set;
 
 @RestController
 @RequestMapping(path = "/question")
@@ -15,8 +17,6 @@ public class QuestionController {
     @GetMapping(path="/", produces = "application/json")
     Iterable<Question> fetchAll()
     {
-        Question question = new Question("What is the time?");
-        questionRepository.save(question);
         return questionRepository.findAll();
     }
 
@@ -29,5 +29,17 @@ public class QuestionController {
     @PostMapping(value = "/", produces = "application/json", consumes = "application/json")
     Question newQuestion(@RequestBody Question newQuestion) {
         return questionRepository.save(newQuestion);
+    }
+
+    @PostMapping(path="/{id}/vote", produces = "application/json", consumes = "application/json")
+    Question vote(@PathVariable String id, @RequestBody Set<Long> optionIds)
+    {
+        Question questionToVoteOn = questionRepository.findById(id).get();
+        for (Option option : questionToVoteOn.getQuestionOptions()) {
+            if(optionIds.contains(option.getId())) {
+                option.addVote();
+            }
+        }
+        return questionRepository.save(questionToVoteOn);
     }
 }
