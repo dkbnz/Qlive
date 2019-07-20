@@ -80,6 +80,7 @@
         </a>
       </li>
     </ul>
+    <el-checkbox v-model="checked">Option</el-checkbox>
   </div>
 </template>
 
@@ -88,6 +89,7 @@ export default {
   name: 'HelloWorld',
   data () {
     return {
+      checked: true,
       msg: 'Welcome to Your Vue.js App'
     }
   }
