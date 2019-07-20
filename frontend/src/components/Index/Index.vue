@@ -12,6 +12,9 @@
         <h2>or</h2>
       </el-row>
       <el-row type="flex" justify="center">
+<!--        <router-link :to="{ name: 'Create', params: { msg } }">-->
+<!--          Go to your profile-->
+<!--        </router-link>-->
         <el-button type="primary" icon="el-icon-edit-outline">Create Quiz</el-button>
       </el-row>
     </div>
@@ -20,7 +23,12 @@
 <script>
     import CodeInput from "./CodeInput";
     export default {
-        name: "Index",
+      name: "Index",
+      data () {
+          return {
+            msg: "Message from Index"
+          }
+      },
       methods: {
           runCommand(code) {
             console.log(code)
