@@ -70,7 +70,13 @@
       },
       submit() {
         this.axios.post('question', this.question)
-          .then(function (response) {
+          .then(response => {
+            this.$router.push({
+              name: 'ViewResults',
+              params: {
+                question: response.data
+              }
+            });
             console.log(response);
           })
           .catch(function (error) {
@@ -84,5 +90,9 @@
 <style scoped>
   .el-row {
     margin-bottom: 10px;
+  }
+
+  /deep/ input {
+    text-align: center;
   }
 </style>
