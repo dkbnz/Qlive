@@ -5,7 +5,7 @@
       </el-row>
       <el-row type="flex" justify="center">
         <el-col :xs="24" :sm="15" :md="13" :lg="11" :xl="9">
-          <code-input @code-submit="runCommand"></code-input>
+          <code-input @code-submit="fetchQuiz"></code-input>
         </el-col>
       </el-row>
       <el-row type="flex" justify="center">
@@ -24,9 +24,21 @@
     export default {
       name: "Index",
       methods: {
-          runCommand(code) {
-            console.log(code)
-          }
+        fetchQuiz(code) {
+          this.axios.get('question/' + code)
+            .then(response => {
+              this.$router.push({
+                name: 'Vote',
+                params: {
+                  question: response.data
+                }
+              });
+              console.log(response);
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+        }
       },
       components: {CodeInput}
     }
