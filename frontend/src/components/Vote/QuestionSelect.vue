@@ -1,14 +1,6 @@
 <template>
   <div>
-    <el-row v-for="i in question.questionOptions.length" @click.native="selectOrUnselect(question.questionOptions[i-1])" v-bind:key="i" type="flex" justify="center" align="middle">
-      <el-col :span="24">
-        <div
-          class="grid-content"
-          v-bind:class="{ selected: selectedOptions.includes(question.questionOptions[i-1].id) }">
-            {{question.questionOptions[i-1].optionText}}
-        </div>
-      </el-col>
-    </el-row>
+
   </div>
 </template>
 
