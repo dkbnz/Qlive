@@ -1,38 +1,38 @@
 <template>
   <div>
-    <el-row type="flex" justify="center">
-      <el-col :xs="24" :sm="15" :md="13" :lg="11" :xl="9">
+    <el-row justify="center" type="flex">
+      <el-col :lg="11" :md="13" :sm="15" :xl="9" :xs="24">
         <el-input placeholder="What do you want to ask?"
                   v-model="question.questionText">
         </el-input>
       </el-col>
     </el-row>
 
-    <el-row type="flex" justify="center">
+    <el-row justify="center" type="flex">
       <el-switch
-        v-model="question.multiselect"
         active-text="Allow multiple selections"
-        inactive-text="Single selection only">
+        inactive-text="Single selection only"
+        v-model="question.multiselect">
       </el-switch>
     </el-row>
 
 
-    <el-row type="flex" justify="center">
-      <el-col :xs="24" :sm="15" :md="13" :lg="11" :xl="9">
-        <el-row v-for="i in question.questionOptions.length" v-bind:key="i" type="flex" justify="center">
-          <el-input placeholder="Add option..."
-                    v-model="question.questionOptions[i-1].optionText"
-                    :disabled="i !== question.questionOptions.length">
+    <el-row justify="center" type="flex">
+      <el-col :lg="11" :md="13" :sm="15" :xl="9" :xs="24">
+        <el-row justify="center" type="flex" v-bind:key="i" v-for="i in question.questionOptions.length">
+          <el-input :disabled="i !== question.questionOptions.length"
+                    placeholder="Add option..."
+                    v-model="question.questionOptions[i-1].optionText">
           </el-input>
         </el-row>
       </el-col>
     </el-row>
 
 
-    <el-row type="flex" justify="center">
-      <el-button type="primary" icon="el-icon-minus" @click="removeOption" circle></el-button>
-      <el-button type="primary" icon="el-icon-edit-outline" @click="submit">Create Quiz</el-button>
-      <el-button type="primary" icon="el-icon-plus" @click="addOption" circle></el-button>
+    <el-row justify="center" type="flex">
+      <el-button @click="removeOption" circle icon="el-icon-minus" type="primary"></el-button>
+      <el-button @click="submit" icon="el-icon-edit-outline" type="primary">Create Quiz</el-button>
+      <el-button @click="addOption" circle icon="el-icon-plus" type="primary"></el-button>
     </el-row>
   </div>
 </template>
@@ -40,7 +40,7 @@
 <script>
   export default {
     name: "Create",
-    data () {
+    data() {
       return {
         question: {
           questionText: "",
@@ -68,7 +68,14 @@
       removeOption() {
         this.question.questionOptions.pop();
       },
+
+
       submit() {
+        const loading = this.$loading({
+          lock: true,
+          background: 'rgba(0, 0, 0, 0.5)'
+        });
+
         this.axios.post('question', this.question)
           .then(response => {
             this.$router.push({
@@ -82,6 +89,8 @@
           .catch(function (error) {
             console.log(error);
           });
+
+        loading.close();
       }
     }
   }
