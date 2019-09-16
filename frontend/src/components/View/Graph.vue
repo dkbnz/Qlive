@@ -1,12 +1,12 @@
 <template>
   <div>
-    <apexchart width="100%" :options="options" :series="series"></apexchart>
+    <apexchart :options="options" :series="series" width="100%"></apexchart>
   </div>
 </template>
 
 <script>
   export default {
-    props : ['question'],
+    props: ['question'],
     name: "Graph",
     data() {
       return {
@@ -36,7 +36,7 @@
               fontFamily: 'Helvetica, Arial, sans-serif',
               colors: ['#000']
             },
-            formatter: function(val, opt) {
+            formatter: function (val, opt) {
               return opt.w.globals.labels[opt.dataPointIndex] + ": " + val
             },
             offsetX: 0,
@@ -67,7 +67,7 @@
             },
             y: {
               title: {
-                formatter: function() {
+                formatter: function () {
                   return ''
                 }
               }
@@ -81,7 +81,7 @@
       options() {
         this.chartOptions.xaxis.categories = [];
 
-        for(let i = 0; i < this.question.questionOptions.length; i++) {
+        for (let i = 0; i < this.question.questionOptions.length; i++) {
           this.chartOptions.xaxis.categories.push(this.question.questionOptions[i].optionText);
         }
 
@@ -95,7 +95,7 @@
           data: []
         }];
 
-        for(let i = 0; i < this.question.questionOptions.length; i++) {
+        for (let i = 0; i < this.question.questionOptions.length; i++) {
           seriesTemplate[0].data.push(this.question.questionOptions[i].voteCount);
         }
 

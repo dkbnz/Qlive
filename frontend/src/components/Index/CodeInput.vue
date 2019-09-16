@@ -1,41 +1,41 @@
 <template>
   <div>
-    <el-form label-position="top" ref="codeForm" :model="code" :rules="rules">
-      <el-row type="flex" :gutter="5" class="row-bg" justify="center">
+    <el-form :model="code" :rules="rules" label-position="top" ref="codeForm">
+      <el-row :gutter="5" class="row-bg" justify="center" type="flex">
 
-        <el-col :span="5" :offset="1">
+        <el-col :offset="1" :span="5">
           <el-form-item prop="first">
-            <el-input ref="firstSegment" placeholder="XX"
-                      v-model="code.first"
-                      maxlength="2"
-                      @input="text => checkInput(text, 0)">
+            <el-input @input="text => checkInput(text, 0)" maxlength="2"
+                      placeholder="XX"
+                      ref="firstSegment"
+                      v-model="code.first">
             </el-input>
           </el-form-item>
         </el-col>
 
         <el-col :span="5">
           <el-form-item prop="second">
-            <el-input ref="secondSegment" placeholder="XX"
-                      v-model="code.second"
-                      maxlength="2"
-                      @input="text => checkInput(text, 1)">
+            <el-input @input="text => checkInput(text, 1)" maxlength="2"
+                      placeholder="XX"
+                      ref="secondSegment"
+                      v-model="code.second">
             </el-input>
           </el-form-item>
         </el-col>
 
         <el-col :span="5">
           <el-form-item prop="third">
-            <el-input ref="thirdSegment" placeholder="XX"
-                      v-model="code.third"
+            <el-input @input="text => checkInput(text, 2)" @keyup.native.enter="submit"
                       maxlength="2"
-                      @input="text => checkInput(text, 2)"
-                      @keyup.native.enter="submit">
+                      placeholder="XX"
+                      ref="thirdSegment"
+                      v-model="code.third">
             </el-input>
           </el-form-item>
         </el-col>
 
         <el-col :span="1">
-          <el-button ref="submitCode" @click="submit" icon="el-icon-right" circle></el-button>
+          <el-button @click="submit" circle icon="el-icon-right" ref="submitCode"></el-button>
         </el-col>
 
       </el-row>
