@@ -33,10 +33,8 @@
 </template>
 
 <script>
-  import QuestionSelect from "./QuestionSelect";
   export default {
     name: "Vote",
-    components: {QuestionSelect},
     props: ['question'],
     data: function() {
       return {

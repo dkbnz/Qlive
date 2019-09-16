@@ -8,7 +8,7 @@
 
     <el-row type="flex" justify="center">
       <el-col :xs="24" :sm="15" :md="13" :lg="11" :xl="9">
-        <h3>Navigate to arstarst.com and enter the code {{question.id}} to answer</h3>
+        <h3>Navigate to qlive.dougbarrett.nz and enter the code {{question.id}} to answer</h3>
       </el-col>
     </el-row>
 
@@ -37,7 +37,6 @@
       }
     },
     created: function() {
-
       this.fetchQuestion();
       this.timer = setInterval(this.fetchQuestion, 1000)
 
