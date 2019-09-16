@@ -8,7 +8,7 @@ import 'element-ui/lib/theme-chalk/index.css';
 import axios from 'axios'
 
 const base = axios.create({
-  baseURL: 'http://localhost:8081/api'
+  baseURL: 'api'
 });
 
 Vue.prototype.$http = base;

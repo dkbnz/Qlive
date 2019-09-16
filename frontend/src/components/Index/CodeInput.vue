@@ -1,31 +1,37 @@
 <template>
   <div>
-    <el-form label-position="top" ref="codeForm">
+    <el-form label-position="top" ref="codeForm" :model="code" :rules="rules">
       <el-row type="flex" :gutter="5" class="row-bg" justify="center">
         <el-col :span="5" :offset="1">
+
+          <el-form-item prop="first">
           <el-input ref="firstSegment" placeholder="XX"
                     v-model="code.first"
                     maxlength="2"
-                    pattern="[A-Za-z0-9]{2}"
                     @input="text => checkInput(text, 0)">
           </el-input>
+          </el-form-item>
         </el-col>
         <el-col :span="5">
+
+          <el-form-item prop="second">
           <el-input ref="secondSegment" placeholder="XX"
                     v-model="code.second"
                     maxlength="2"
-                    pattern="[A-Za-z0-9]{2}"
                     @input="text => checkInput(text, 1)">
           </el-input>
+          </el-form-item>
         </el-col>
         <el-col :span="5">
+
+          <el-form-item prop="third">
           <el-input ref="thirdSegment" placeholder="XX"
                     v-model="code.third"
                     maxlength="2"
-                    pattern="[A-Za-z0-9]{2}"
                     @input="text => checkInput(text, 2)"
                     @keyup.native.enter="submit">
           </el-input>
+          </el-form-item>
         </el-col>
         <el-col :span="1">
           <el-button ref="submitCode" @click="submit" icon="el-icon-right" circle></el-button>
@@ -44,6 +50,11 @@
           first: '',
           second: '',
           third: ''
+        },
+        rules: {
+          first: [{ required: true, pattern: /^[A-Za-z0-9]{2}$/, message: ' ', trigger: 'blur' }],
+          second: [{ required: true, pattern: /^[A-Za-z0-9]{2}$/, message: ' ', trigger: 'blur' }],
+          third: [{ required: true, pattern: /^[A-Za-z0-9]{2}$/, message: ' ', trigger: 'blur' }]
         }
       }
     },
@@ -69,8 +80,17 @@
           }
         }
       },
+
+
+      /**
+       * Validate the form, if everything is valid, emit the code-submit event to the parent component.
+       */
       submit() {
-        this.$emit('code-submit', (this.code.first + this.code.second + this.code.third).toUpperCase())
+        this.$refs['codeForm'].validate((valid) => {
+          if (valid) {
+            this.$emit('code-submit', (this.code.first + this.code.second + this.code.third).toUpperCase())
+          }
+        });
       },
     }
   }
