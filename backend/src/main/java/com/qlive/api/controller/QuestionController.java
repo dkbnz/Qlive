@@ -18,11 +18,6 @@ public class QuestionController {
     @Autowired
     private QuestionRepository questionRepository;
 
-    @GetMapping(path="", produces = "application/json")
-    Iterable<Question> fetchAll()
-    {
-        return questionRepository.findAll();
-    }
 
     @GetMapping(path="/{id}", produces = "application/json")
     ResponseEntity<Question> fetch(@PathVariable String id)
@@ -34,20 +29,28 @@ public class QuestionController {
         return new ResponseEntity<Question>(questionOptional.get(), HttpStatus.OK);
     }
 
+
     @PostMapping(value = "", produces = "application/json", consumes = "application/json")
     Question newQuestion(@RequestBody Question newQuestion) {
         return questionRepository.save(newQuestion);
     }
 
+
     @PostMapping(path="/{id}/vote", produces = "application/json", consumes = "application/json")
-    Question vote(@PathVariable String id, @RequestBody Set<Long> optionIds)
+    ResponseEntity<Question> vote(@PathVariable String id, @RequestBody Set<Long> optionIds)
     {
-        Question questionToVoteOn = questionRepository.findById(id).get();
+        Optional<Question> questionOptional = questionRepository.findById(id);
+        if(!questionOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        Question questionToVoteOn = questionOptional.get();
         for (Option option : questionToVoteOn.getQuestionOptions()) {
             if(optionIds.contains(option.getId())) {
                 option.addVote();
             }
         }
-        return questionRepository.save(questionToVoteOn);
+
+        return new ResponseEntity<Question>(questionRepository.save(questionToVoteOn), HttpStatus.OK);
     }
 }
