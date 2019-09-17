@@ -12,7 +12,6 @@
             </el-input>
           </el-form-item>
         </el-col>
-
         <el-col :span="5">
           <el-form-item prop="second">
             <el-input @input="text => checkInput(text, 1)" maxlength="2"
