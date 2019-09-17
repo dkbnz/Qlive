@@ -19,7 +19,7 @@
 
     <el-row justify="center" type="flex">
       <el-col :lg="11" :md="13" :sm="15" :xl="9" :xs="24">
-        <graph :question="question"></graph>
+        <graph v-if="questionViewed" :question="questionViewed"></graph>
       </el-col>
     </el-row>
   </div>
@@ -34,20 +34,19 @@
     props: ['question'],
     data: function () {
       return {
-        timer: ''
+        timer: null,
+        questionViewed: null
       }
     },
     created: function () {
       this.fetchQuestion();
-      this.timer = setInterval(this.fetchQuestion, 1000)
-
+      this.timer = setInterval(this.fetchQuestion, 2000)
     },
     methods: {
       fetchQuestion() {
         this.axios.get('question/' + this.question.id)
           .then(response => {
-            this.question = response.data;
-            console.log(response);
+            this.questionViewed = response.data;
           })
           .catch(function (error) {
             console.log(error);

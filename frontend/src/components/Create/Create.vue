@@ -1,39 +1,66 @@
 <template>
   <div>
-    <el-row justify="center" type="flex">
-      <el-col :lg="11" :md="13" :sm="15" :xl="9" :xs="24">
-        <el-input placeholder="What do you want to ask?"
-                  v-model="question.questionText">
-        </el-input>
-      </el-col>
-    </el-row>
+    <el-form :model="question" ref="question">
 
-    <el-row justify="center" type="flex">
-      <el-switch
-        active-text="Allow multiple selections"
-        inactive-text="Single selection only"
-        v-model="question.multiselect">
-      </el-switch>
-    </el-row>
+      <el-row justify="center" type="flex">
+
+        <el-col :lg="11" :md="13" :sm="15" :xl="9" :xs="24">
+
+          <el-row justify="center" type="flex">
+            <el-form-item
+              prop="questionText"
+              :rules="{ required: true, message: 'You must enter a question', trigger: 'blur' }"
+              style="width: 100%"
+            >
+            <el-input placeholder="What do you want to ask?"
+                      v-model="question.questionText">
+            </el-input>
+            </el-form-item>
+          </el-row>
+
+          <el-row justify="center" type="flex">
+            <el-switch
+              active-text="Allow multiple selections"
+              inactive-text="Single selection only"
+              v-model="question.multiselect">
+            </el-switch>
+          </el-row>
+
+          <el-row justify="center" type="flex" v-bind:key="i" v-for="(questionOption, i) in question.questionOptions">
+            <el-form-item
+              :prop="'questionOptions[' + i + '].optionText'"
+              :rules="{ required: true, message: 'Please enter an option or remove if uneccessary', trigger: 'blur' }"
+              style="width: 100%"
+            >
+              <el-input :disabled="i !== (question.questionOptions.length - 1)"
+                        placeholder="Add option..."
+                        required
+                        v-model="questionOption.optionText">
+              </el-input>
+            </el-form-item>
+          </el-row>
+
+          <el-row justify="center" type="flex">
+            <el-alert
+              :title="error.message"
+              :type="error.type"
+              @close="error.show = false"
+              center
+              v-if="error.show">
+            </el-alert>
+          </el-row>
+
+          <el-row justify="center" type="flex">
+            <el-button @click="removeOption" circle icon="el-icon-minus" type="primary"></el-button>
+            <el-button @click="submit" icon="el-icon-edit-outline" type="primary">Create Quiz</el-button>
+            <el-button @click="addOption" circle icon="el-icon-plus" type="primary"></el-button>
+          </el-row>
+
+        </el-col>
 
 
-    <el-row justify="center" type="flex">
-      <el-col :lg="11" :md="13" :sm="15" :xl="9" :xs="24">
-        <el-row justify="center" type="flex" v-bind:key="i" v-for="i in question.questionOptions.length">
-          <el-input :disabled="i !== question.questionOptions.length"
-                    placeholder="Add option..."
-                    v-model="question.questionOptions[i-1].optionText">
-          </el-input>
-        </el-row>
-      </el-col>
-    </el-row>
-
-
-    <el-row justify="center" type="flex">
-      <el-button @click="removeOption" circle icon="el-icon-minus" type="primary"></el-button>
-      <el-button @click="submit" icon="el-icon-edit-outline" type="primary">Create Quiz</el-button>
-      <el-button @click="addOption" circle icon="el-icon-plus" type="primary"></el-button>
-    </el-row>
+      </el-row>
+    </el-form>
   </div>
 </template>
 
@@ -42,6 +69,11 @@
     name: "Create",
     data() {
       return {
+        error: {
+          show: false,
+          message: "An error has occurred.",
+          type: 'error'
+        },
         question: {
           questionText: "",
           multiselect: false,
@@ -53,44 +85,72 @@
     },
     methods: {
       addOption() {
+        this.error.show = false;
         if (this.question.questionOptions.length < 10) {
-          this.question.questionOptions.push({
-            optionText: ""
-          })
+          this.$refs['question'].validate((valid) => {
+            if (valid) {
+              this.question.questionOptions.push({
+                optionText: ""
+              })
+            }
+          });
         } else {
-          this.$message({
-            showClose: true,
+          this.error = {
+            show: true,
             message: 'Maximum of 10 options.',
             type: 'warning'
-          });
+          };
         }
       },
+
+
       removeOption() {
-        this.question.questionOptions.pop();
+        this.error.show = false;
+        if (this.question.questionOptions.length > 1) {
+          this.question.questionOptions.pop();
+        }
       },
 
 
       submit() {
-        const loading = this.$loading({
-          lock: true,
-          background: 'rgba(0, 0, 0, 0.5)'
+        this.error.show = false;
+        let self = this;
+        this.$refs['question'].validate((valid) => {
+          if (valid) {
+            if (this.question.questionOptions.length > 1) {
+              const loading = this.$loading({
+                lock: true,
+                background: 'rgba(0, 0, 0, 0.5)'
+              });
+
+              this.axios.post('question', this.question)
+                .then(response => {
+                  this.$router.push({
+                    name: 'ViewResults',
+                    params: {
+                      question: response.data
+                    }
+                  });
+                })
+                .catch(function (error) {
+                  self.error = {
+                    show: true,
+                    message: error.message,
+                    type: 'error'
+                  };
+                });
+              loading.close();
+
+            } else {
+              this.error = {
+                show: true,
+                message: 'You must have at least two options.',
+                type: 'error'
+              };
+            }
+          }
         });
 
-        this.axios.post('question', this.question)
-          .then(response => {
-            this.$router.push({
-              name: 'ViewResults',
-              params: {
-                question: response.data
-              }
-            });
-            console.log(response);
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
-
-        loading.close();
       }
     }
   }
