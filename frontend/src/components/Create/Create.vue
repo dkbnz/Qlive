@@ -12,9 +12,9 @@
               :rules="{ required: true, message: 'You must enter a question', trigger: 'blur' }"
               style="width: 100%"
             >
-            <el-input placeholder="What do you want to ask?"
-                      v-model="question.questionText">
-            </el-input>
+              <el-input placeholder="What do you want to ask?"
+                        v-model="question.questionText">
+              </el-input>
             </el-form-item>
           </el-row>
 
@@ -26,19 +26,19 @@
             </el-switch>
           </el-row>
 
-          <el-row justify="center" type="flex" v-bind:key="i" v-for="(questionOption, i) in question.questionOptions">
-            <el-form-item
-              :prop="'questionOptions[' + i + '].optionText'"
-              :rules="{ required: true, message: 'Please enter an option or remove if uneccessary', trigger: 'blur' }"
-              style="width: 100%"
-            >
-              <el-input :disabled="i !== (question.questionOptions.length - 1)"
-                        placeholder="Add option..."
-                        required
-                        v-model="questionOption.optionText">
-              </el-input>
-            </el-form-item>
-          </el-row>
+          <el-form-item
+            class="ma-0 pa-0"
+            v-bind:key="i" v-for="(questionOption, i) in question.questionOptions"
+            :prop="'questionOptions[' + i + '].optionText'"
+            :rules="{ required: true, message: 'Please enter an option or remove if uneccessary', trigger: 'blur' }"
+            style="width: 100%"
+          >
+            <el-input :disabled="i !== (question.questionOptions.length - 1)"
+                      placeholder="Add option..."
+                      required
+                      v-model="questionOption.optionText">
+            </el-input>
+          </el-form-item>
 
           <el-row justify="center" type="flex">
             <el-alert
