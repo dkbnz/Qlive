@@ -1,14 +1,19 @@
-name: Docker Image CI
+name: Build and push to registry
 
 on: [push]
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v1
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag qlive:$(date +%s)
+    - name: Build the image
+      run: docker build . --tag registry.dougbarrett.nz/dkbarrett/qlive:latest
+    
+    - name: Push to registry
+      env:
+        REGISTRY_USERNAME: ${{ secrets.REGISTRY_USERNAME }}
+        REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
+      run: |
+        docker login registry.dougbarrett.nz -u $REGISTRY_USERNAME -p $REGISTRY_PASSWORD
+        docker push registry.dougbarrett.nz/dkbarrett/qlive:latest
