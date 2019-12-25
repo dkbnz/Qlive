@@ -1,9 +1,12 @@
 name: Build and push to registry
 
-on: [push]
+on:
+  push:
+    branches:
+      - master
 
 jobs:
-  build:
+  build_push:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
