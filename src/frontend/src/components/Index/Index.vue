@@ -1,7 +1,7 @@
 <template>
   <div id="index">
     <el-row justify="center" type="flex">
-      <h1>Enter code</h1>
+      <h1>Enter a code</h1>
     </el-row>
     <el-row justify="center" type="flex">
       <el-col :lg="11" :md="13" :sm="15" :xl="9" :xs="24">
