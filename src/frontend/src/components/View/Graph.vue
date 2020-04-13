@@ -1,6 +1,6 @@
 <template>
   <div>
-    <apexchart :options="options" :series="series" width="100%"></apexchart>
+    <apexchart :options="this.chartOptions" :series="series" width="100%"></apexchart>
   </div>
 </template>
 
@@ -8,6 +8,15 @@
   export default {
     props: ['question'],
     name: "Graph",
+    watch: {
+      question: function() {
+          this.chartOptions.xaxis.categories = [];
+
+          for (let i = 0; i < this.question.questionOptions.length; i++) {
+            this.chartOptions.xaxis.categories.push(this.question.questionOptions[i].optionText);
+          }
+        }
+    },
     data() {
       return {
         chartOptions: {
@@ -77,18 +86,6 @@
       }
     },
     computed: {
-
-      options() {
-        this.chartOptions.xaxis.categories = [];
-
-        for (let i = 0; i < this.question.questionOptions.length; i++) {
-          this.chartOptions.xaxis.categories.push(this.question.questionOptions[i].optionText);
-        }
-
-        return this.chartOptions;
-
-      },
-
       series() {
         let seriesTemplate = [{
           name: 'series-1',
@@ -110,3 +107,4 @@
     margin-bottom: 10px;
   }
 </style>
+

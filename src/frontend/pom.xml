@@ -16,7 +16,7 @@
 				<!-- Plugin for packaging the frontend -->
 				<groupId>com.github.eirslett</groupId>
 				<artifactId>frontend-maven-plugin</artifactId>
-				<version>1.7.6</version>
+				<version>1.9.1</version>
 				<executions>
 					<!-- Install node and npm locally -->
 					<execution>
@@ -25,7 +25,7 @@
 							<goal>install-node-and-npm</goal>
 						</goals>
 						<configuration>
-							<nodeVersion>v10.16.0</nodeVersion>
+							<nodeVersion>v12.16.2</nodeVersion>
 						</configuration>
 					</execution>
 					<!-- Install all node project dependencies -->
