@@ -6,7 +6,7 @@ See a demo at [https://qlive.dougbarrett.nz/](https://qlive.dougbarrett.nz/)
 
 ### Usage
 
-#### Tested using:
+#### Tested using
  - docker version 19.03.6
  - docker-compose version 1.17.1
 
