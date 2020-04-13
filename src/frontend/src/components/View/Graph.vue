@@ -8,9 +8,24 @@
   export default {
     props: ['question'],
     name: "Graph",
-    data() {
-      return {
-        chartOptions: {
+    computed: {
+      series() {
+        let seriesTemplate = [{
+          name: 'series-1',
+          data: []
+        }];
+
+        for (let i = 0; i < this.question.questionOptions.length; i++) {
+          seriesTemplate[0].data.push(this.question.questionOptions[i].voteCount);
+        }
+
+        return seriesTemplate;
+      },
+      options() {
+        let chartOptions = {
+          legend: {
+            show: false
+          },
           chart: {
             type: 'bar',
             toolbar: {
@@ -49,10 +64,10 @@
             colors: ['#fff']
           },
           xaxis: {
+            categories: [],
             labels: {
               show: false
             },
-            categories: [],
             tickAmount: 1
           },
           yaxis: {
@@ -74,32 +89,12 @@
             }
           }
         }
-      }
-    },
-    computed: {
-
-      options() {
-        this.chartOptions.xaxis.categories = [];
 
         for (let i = 0; i < this.question.questionOptions.length; i++) {
-          this.chartOptions.xaxis.categories.push(this.question.questionOptions[i].optionText);
+          chartOptions.xaxis.categories.push(this.question.questionOptions[i].optionText);
         }
 
-        return this.chartOptions;
-
-      },
-
-      series() {
-        let seriesTemplate = [{
-          name: 'series-1',
-          data: []
-        }];
-
-        for (let i = 0; i < this.question.questionOptions.length; i++) {
-          seriesTemplate[0].data.push(this.question.questionOptions[i].voteCount);
-        }
-
-        return seriesTemplate;
+        return chartOptions
       }
     }
   }
@@ -110,3 +105,4 @@
     margin-bottom: 10px;
   }
 </style>
+
