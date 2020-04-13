@@ -1,0 +1,39 @@
+version: '3.3'
+services:
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'qlive'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_RANDOM_ROOT_PASSWORD: 'true'
+    expose:
+      - '3306'
+    networks:
+      - backend
+    volumes:
+      - my-db:/var/lib/mysql
+
+  web:
+    build: .
+    restart: always
+    networks:
+      - backend
+    environment:
+      DB_HOST: 'database'
+      DB_NAME: 'qlive'
+      DB_USER: 'user'
+      DB_PASSWORD: 'password'
+    ports:
+      - 80:9000
+    depends_on:
+      - db
+    links:
+      - 'db:database'
+
+networks:
+  backend:
+
+volumes:
+  my-db:

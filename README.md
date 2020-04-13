@@ -6,10 +6,11 @@ See a demo at [https://qlive.dougbarrett.nz/](https://qlive.dougbarrett.nz/)
 
 ### Usage
 
-```bash
-# Build
-docker image build -t qlive .
+#### Tested using:
+ - docker version 19.03.6
+ - docker-compose version 1.17.1
 
-# Run
-docker container run -p 80:9000 qlive
+```bash
+# Build & Run
+docker-compose up -d
 ```
