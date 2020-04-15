@@ -5,9 +5,9 @@ services:
     restart: always
     environment:
       MYSQL_DATABASE: 'qlive'
-      MYSQL_USER: 'user'
+      MYSQL_USER: 'qlive_user'
       MYSQL_PASSWORD: 'password'
-      MYSQL_RANDOM_ROOT_PASSWORD: 'true'
+      MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
     expose:
       - '3306'
     networks:
@@ -23,7 +23,7 @@ services:
     environment:
       DB_HOST: 'database'
       DB_NAME: 'qlive'
-      DB_USER: 'user'
+      DB_USER: 'qlive_user'
       DB_PASSWORD: 'password'
     ports:
       - 80:9000
