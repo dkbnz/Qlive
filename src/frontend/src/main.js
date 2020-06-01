@@ -5,6 +5,10 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import axios from 'axios'
 import VueApexCharts from 'vue-apexcharts'
+import Moment from 'moment';
+
+Moment.locale( 'en' );
+Object.defineProperty( Vue.prototype, '$moment', { value: Moment });
 
 Vue.component('apexchart', VueApexCharts)
 
