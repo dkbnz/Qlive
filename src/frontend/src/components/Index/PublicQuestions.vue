@@ -2,10 +2,10 @@
     <div>
         <el-card class="box-card">
             <div slot="header" class="clearfix">
-                <question-search>
+                <question-search @search="fetchResults">
                 </question-search>
             </div>
-            <question-list>
+            <question-list @question-selected="questionSelected">
             </question-list>
         </el-card>
     </div>
@@ -16,7 +16,15 @@
     import QuestionSearch from "./QuestionSearch";
     export default {
         name: "PublicQuestions",
-        components: {QuestionSearch, QuestionList}
+        components: {QuestionSearch, QuestionList},
+        methods: {
+            fetchResults(query) {
+                console.log(query)
+            },
+            questionSelected(id) {
+                console.log(id)
+            }
+        }
     }
 </script>
 
