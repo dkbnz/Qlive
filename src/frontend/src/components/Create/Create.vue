@@ -19,11 +19,8 @@
           </el-row>
 
           <el-row justify="center" type="flex">
-            <el-switch
-              active-text="Allow multiple selections"
-              inactive-text="Single selection only"
-              v-model="question.multiselect">
-            </el-switch>
+            <el-checkbox v-model="question.multiselect">Allow multiple selections</el-checkbox>
+            <el-checkbox v-model="question.public">List question publicly</el-checkbox>
           </el-row>
 
           <el-form-item
@@ -77,6 +74,7 @@
         question: {
           questionText: "",
           multiselect: false,
+          public: false,
           questionOptions: [{
             optionText: ""
           }]
@@ -131,6 +129,7 @@
                       question: response.data
                     }
                   });
+                  loading.close();
                 })
                 .catch(function (error) {
                   self.error = {
@@ -138,8 +137,8 @@
                     message: error.message,
                     type: 'error'
                   };
+                  loading.close();
                 });
-              loading.close();
 
             } else {
               this.error = {

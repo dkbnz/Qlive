@@ -37,7 +37,6 @@
     },
     methods: {
       fetchQuiz(code) {
-        console.log(code)
         this.showError = false;
 
         const loader = this.$loading({
@@ -54,12 +53,13 @@
                 question: response.data
               }
             });
+            loader.close();
           })
           .catch(function (error) {
             self.errorText = error.message;
             self.showError = true;
+            loader.close();
           });
-        loader.close();
       }
     },
     components: {PublicQuestions, CodeInput}
