@@ -11,13 +11,13 @@
             </el-col>
             <el-col :xs="11" :sm="8" :md="8" :lg="7" :xl="7">
                 <el-row align="middle">
-                    <small><i class="el-icon-date"></i> {{ parseDate(question.date) }}</small>
+                    <small><i class="el-icon-date"></i> {{ $moment(question.created).format('L') }}</small>
                 </el-row>
                 <el-row align="middle">
-                    <small><i class="el-icon-time"></i> {{ parseTime(question.date) }}</small>
+                    <small><i class="el-icon-time"></i> {{ $moment(question.created).format('LT') }}</small>
                 </el-row>
                 <el-row align="middle">
-                    <small><i class="el-icon-s-custom"></i> {{ question.votes }} vote{{ question.votes !== 1 ? 's' : '' }}</small>
+                    <small><i class="el-icon-s-custom"></i> {{ question.voteCount }} vote{{ question.voteCount !== 1 ? 's' : '' }}</small>
                 </el-row>
             </el-col>
         </el-row>
@@ -29,21 +29,6 @@
         name: "QuestionList",
         props: {
             questions: Array
-        },
-        data () {
-            return {
-                selected: ""
-            }
-        },
-        methods: {
-            parseDate(timestamp) {
-                timestamp = this.$moment(timestamp*1000).format('L')
-                return timestamp
-            },
-            parseTime(timestamp) {
-                timestamp = this.$moment(timestamp*1000).format('LT');
-                return timestamp
-            }
         }
     }
 </script>

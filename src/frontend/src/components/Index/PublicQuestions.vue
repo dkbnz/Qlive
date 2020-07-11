@@ -48,11 +48,25 @@
                 ]
             }
         },
+        mounted: function () {
+            this.$nextTick(function () {
+                this.fetchResults('')
+            })
+        },
         methods: {
             fetchResults(query) {
                 this.loadingQuestions = true
-                // Do the query here
-                console.log(query)
+                this.axios.get('question', {
+                    params: {
+                        q: query
+                    }
+                }).then(response => {
+                        this.questions = response.data;
+                        this.loadingQuestions = false;
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
             },
             questionSelected(id) {
                 this.$emit('question-select', id)
