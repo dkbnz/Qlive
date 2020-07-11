@@ -3,7 +3,7 @@
         <el-card shadow="never">
             <div slot="header" class="clearfix">
                 <question-search
-                        @search="fetchResults"
+                        @search="fetchInitial"
                 >
                 </question-search>
             </div>
@@ -13,6 +13,7 @@
                     v-loading="loadingQuestions"
             >
             </question-list>
+            <p v-if="!moreToFetch">No more results... <el-link target="_blank" @click.native="scrollToTop">Back to top</el-link></p>
         </el-card>
     </div>
 </template>
@@ -26,48 +27,71 @@
         data: function() {
             return {
                 loadingQuestions: false,
-                questions: [
-                    {
-                        id: "TS4D5A",
-                        questionText: "This is some question text",
-                        votes: 0,
-                        date: 1591047363
-                    },
-                    {
-                        id: "HGWX5L",
-                        questionText: "This is some question text, maybe even a little longer.",
-                        votes: 1,
-                        date: 1501049082
-                    },
-                    {
-                        id: "DHP3A9",
-                        questionText: "This is some question text, maybe even a little longer. Possibly even a little longer than that",
-                        votes: 100,
-                        date: 1500000000
-                    }
-                ]
+                questions: [],
+                pageNumber: 0,
+                moreToFetch: true
             }
         },
         mounted: function () {
             this.$nextTick(function () {
-                this.fetchResults('')
+                this.fetchInitial('')
+            })
+        },
+        created() {
+            window.addEventListener('scroll', () => {
+                if (this.bottomVisible()) {
+                    this.fetchMore();
+                }
             })
         },
         methods: {
-            fetchResults(query) {
+            bottomVisible() {
+                const scrollY = window.scrollY
+                const visible = document.documentElement.clientHeight
+                const pageHeight = document.documentElement.scrollHeight
+                const bottomOfPage = visible + scrollY >= pageHeight
+                return bottomOfPage || pageHeight < visible
+            },
+
+            fetchMore() {
+                if(this.moreToFetch && !this.loadingQuestions) {
+                    this.pageNumber += 1
+                    this.fetchResults(this.query, this.pageNumber)
+                }
+            },
+
+            fetchInitial(query) {
+                this.query = query;
+                this.pageNumber = 0;
+                this.questions = [];
+                this.moreToFetch = true;
+                this.fetchResults(this.query, this.pageNumber)
+            },
+
+            fetchResults(query, pageNumber) {
                 this.loadingQuestions = true
                 this.axios.get('question', {
                     params: {
-                        q: query
+                        query: query,
+                        pageNo: pageNumber
                     }
                 }).then(response => {
-                        this.questions = response.data;
-                        this.loadingQuestions = false;
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
+                    if(!response.data.length) {
+                        this.moreToFetch = false;
+                        console.log(this.moreToFetch)
+                    }
+                    this.questions = this.questions.concat(response.data)
+                    this.loadingQuestions = false;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
             },
+
+            scrollToTop() {
+                window.scrollTo(0,0);
+            },
+
             questionSelected(id) {
                 this.$emit('question-select', id)
             }
