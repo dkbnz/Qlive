@@ -1,35 +1,25 @@
 <template>
   <div id="index">
     <el-row justify="center" type="flex">
-      <h1>Enter a code</h1>
-    </el-row>
-    <el-row justify="center" type="flex">
-      <el-col :lg="11" :md="13" :sm="15" :xl="9" :xs="24">
-        <code-input @code-submit="fetchQuiz"></code-input>
+      <el-col :lg="11" :md="13" :sm="15" :xl="9" :xs="24" justify="center" >
+        <el-card class="box-card" shadow="always">
+          <h1>Enter quiz code</h1>
+          <code-input @code-submit="fetchQuiz"></code-input>
+          <el-alert
+                  :title="errorText"
+                  @close="showError = false"
+                  center
+                  type="error"
+                  v-if="showError">
+          </el-alert>
+          <h2>or</h2>
+          <router-link :to="{ name: 'Create' }">
+            <el-button icon="el-icon-edit-outline" type="primary">Create Quiz</el-button>
+          </router-link>
+          <el-divider></el-divider>
+          <public-questions @question-select="fetchQuiz"></public-questions>
+        </el-card>
       </el-col>
-    </el-row>
-    <el-row justify="center" type="flex">
-      <el-col :lg="11" :md="13" :sm="15" :xl="9" :xs="24">
-        <el-alert
-          :title="errorText"
-          @close="showError = false"
-          center
-          type="error"
-          v-if="showError">
-        </el-alert>
-      </el-col>
-    </el-row>
-    <el-row justify="center" type="flex">
-      <h2>or</h2>
-    </el-row>
-    <el-row justify="center" type="flex">
-      <router-link :to="{ name: 'Create' }">
-        <el-button icon="el-icon-edit-outline" type="primary">Create Quiz</el-button>
-      </router-link>
-    </el-row>
-    <el-row justify="center">
-      <public-questions>
-      </public-questions>
     </el-row>
   </div>
 </template>
@@ -47,6 +37,7 @@
     },
     methods: {
       fetchQuiz(code) {
+        console.log(code)
         this.showError = false;
 
         const loader = this.$loading({
