@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -19,14 +20,25 @@ public class QuestionController {
     private QuestionRepository questionRepository;
 
 
+    @GetMapping(path="", produces = "application/json")
+    ResponseEntity<List<Question>> queryQuestions(@RequestParam(value = "q", required = false) String query)
+    {
+        List<Question> questions;
+        if (query != null) {
+            questions = questionRepository.findQuestionsByQuestionTextContainsAndIsPublicTrueOrderByCreatedDesc(query);
+        } else {
+            questions = questionRepository.findQuestionsByIsPublicTrueOrderByCreatedDesc();
+        }
+
+        return new ResponseEntity<>(questions, HttpStatus.OK);
+    }
+
+
     @GetMapping(path="/{id}", produces = "application/json")
     ResponseEntity<Question> fetch(@PathVariable String id)
     {
         Optional<Question> questionOptional = questionRepository.findById(id);
-        if(!questionOptional.isPresent()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<Question>(questionOptional.get(), HttpStatus.OK);
+        return questionOptional.map(question -> new ResponseEntity<>(question, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
 
@@ -48,9 +60,10 @@ public class QuestionController {
         for (Option option : questionToVoteOn.getQuestionOptions()) {
             if(optionIds.contains(option.getId())) {
                 option.addVote();
+                questionToVoteOn.addVote();
             }
         }
 
-        return new ResponseEntity<Question>(questionRepository.save(questionToVoteOn), HttpStatus.OK);
+        return new ResponseEntity<>(questionRepository.save(questionToVoteOn), HttpStatus.OK);
     }
 }
