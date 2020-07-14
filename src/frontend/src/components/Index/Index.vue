@@ -36,7 +36,15 @@
       }
     },
     methods: {
-      fetchQuiz(code) {
+
+      /**
+       * Fetch a quiz from the api.
+       * If successful, move to the vote page.
+       * Otherwise, display relevant errors.
+       *
+       * @param id    Question id to fetch.
+       */
+      fetchQuiz(id) {
         this.showError = false;
 
         const loader = this.$loading({
@@ -45,7 +53,7 @@
         });
 
         let self = this;
-        this.axios.get('question/' + code)
+        this.axios.get('question/' + id)
           .then(response => {
             this.$router.push({
               name: 'Vote',

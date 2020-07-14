@@ -43,6 +43,10 @@
       this.timer = setInterval(this.fetchQuestion, 2000)
     },
     methods: {
+
+      /**
+       * Retrieve the question to be viewed.
+       */
       fetchQuestion() {
         this.axios.get('question/' + this.question.id)
           .then(response => {
@@ -53,6 +57,12 @@
           });
       }
     },
+
+
+    /**
+     * Vue hook.
+     * Ensure the interval is cleared when the component is destroyed.
+     */
     beforeDestroy() {
       clearInterval(this.timer)
     }

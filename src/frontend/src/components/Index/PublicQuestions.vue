@@ -45,6 +45,9 @@
             })
         },
         methods: {
+            /**
+             * Return true if the user is currently at the bottom of the page, false otherwise.
+             */
             bottomVisible() {
                 const scrollY = window.scrollY
                 const visible = document.documentElement.clientHeight
@@ -53,6 +56,10 @@
                 return bottomOfPage || pageHeight < visible
             },
 
+
+            /**
+             * Fetch more public questions iff there are more to fetch and questions aren't currently being loaded.
+             */
             fetchMore() {
                 if(this.moreToFetch && !this.loadingQuestions) {
                     this.pageNumber += 1
@@ -60,6 +67,13 @@
                 }
             },
 
+
+            /**
+             * Make an initial fetch to find the public questions.
+             * Triggered when the user performs a new search.
+             *
+             * @param query     String of the query to perform.
+             */
             fetchInitial(query) {
                 this.query = query;
                 this.pageNumber = 0;
@@ -68,6 +82,13 @@
                 this.fetchResults(this.query, this.pageNumber)
             },
 
+            /**
+             * Create a GET request to query the question api.
+             * Append any results on to the question array.
+             *
+             * @param query         String of the query to perform.
+             * @param pageNumber    Page number to query for pagination.
+             */
             fetchResults(query, pageNumber) {
                 this.loadingQuestions = true
                 this.axios.get('question', {
@@ -78,7 +99,6 @@
                 }).then(response => {
                     if(!response.data.length) {
                         this.moreToFetch = false;
-                        console.log(this.moreToFetch)
                     }
                     this.questions = this.questions.concat(response.data)
                     this.loadingQuestions = false;
@@ -88,10 +108,20 @@
                 });
             },
 
+
+            /**
+             * Scroll the viewport to the top of the screen.
+             */
             scrollToTop() {
                 window.scrollTo(0,0);
             },
 
+
+            /**
+             * Notify the parent component that a question has been selected along with the id of said question.
+             *
+             * @param id    The question id that has been selected.
+             */
             questionSelected(id) {
                 this.$emit('question-select', id)
             }
