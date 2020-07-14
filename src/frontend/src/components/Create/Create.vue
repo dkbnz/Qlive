@@ -82,6 +82,9 @@
       }
     },
     methods: {
+      /**
+       * Add an option to the quiz.
+       */
       addOption() {
         this.error.show = false;
         if (this.question.questionOptions.length < 10) {
@@ -102,6 +105,9 @@
       },
 
 
+      /**
+       * Remove most recently added option from the list.
+       */
       removeOption() {
         this.error.show = false;
         if (this.question.questionOptions.length > 1) {
@@ -110,6 +116,11 @@
       },
 
 
+      /**
+       * Attempt to create a new quiz.
+       * Perform input validation.
+       * If valid, send request, otherwise display relevant error message.
+       */
       submit() {
         this.error.show = false;
         let self = this;
@@ -149,7 +160,6 @@
             }
           }
         });
-
       }
     }
   }
