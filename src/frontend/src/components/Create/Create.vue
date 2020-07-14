@@ -19,11 +19,8 @@
           </el-row>
 
           <el-row justify="center" type="flex">
-            <el-switch
-              active-text="Allow multiple selections"
-              inactive-text="Single selection only"
-              v-model="question.multiselect">
-            </el-switch>
+            <el-checkbox v-model="question.multiselect">Allow multiple selections</el-checkbox>
+            <el-checkbox v-model="question.public">List question publicly</el-checkbox>
           </el-row>
 
           <el-form-item
@@ -77,6 +74,7 @@
         question: {
           questionText: "",
           multiselect: false,
+          public: false,
           questionOptions: [{
             optionText: ""
           }]
@@ -84,6 +82,9 @@
       }
     },
     methods: {
+      /**
+       * Add an option to the quiz.
+       */
       addOption() {
         this.error.show = false;
         if (this.question.questionOptions.length < 10) {
@@ -104,6 +105,9 @@
       },
 
 
+      /**
+       * Remove most recently added option from the list.
+       */
       removeOption() {
         this.error.show = false;
         if (this.question.questionOptions.length > 1) {
@@ -112,6 +116,11 @@
       },
 
 
+      /**
+       * Attempt to create a new quiz.
+       * Perform input validation.
+       * If valid, send request, otherwise display relevant error message.
+       */
       submit() {
         this.error.show = false;
         let self = this;
@@ -131,6 +140,7 @@
                       question: response.data
                     }
                   });
+                  loading.close();
                 })
                 .catch(function (error) {
                   self.error = {
@@ -138,8 +148,8 @@
                     message: error.message,
                     type: 'error'
                   };
+                  loading.close();
                 });
-              loading.close();
 
             } else {
               this.error = {
@@ -150,7 +160,6 @@
             }
           }
         });
-
       }
     }
   }
