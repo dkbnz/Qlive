@@ -7,6 +7,5 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 
 
 public interface QuestionRepository extends PagingAndSortingRepository<Question, String> {
-    Page<Question> findQuestionsByIsPublicTrueOrderByCreatedDesc(Pageable restrictions);
     Page<Question> findQuestionsByQuestionTextContainsAndIsPublicTrueOrderByCreatedDesc(String query, Pageable restrictions);
 }
